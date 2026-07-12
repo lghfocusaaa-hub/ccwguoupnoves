@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCW大群小说</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- 启动首页 -->
+    <div id="landing-page">
+        <div class="landing-logo">CCW novels</div>
+        <div class="landing-desc">:: CCW大群小说 ::</div>
+        <button class="start-btn" onclick="enterReader()">开始阅读</button>
+        <div class="landing-tips">Vessel Yamiaoω制作</div>
+    </div>
+
+    <div class="sidebar">
+        <div class="brand">
+            <h1>CCW novels</h1>
+            <span>SNOVELS FROM CCW</span>
+        </div>
+        <div class="chapter-list" id="chapterList">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="connectionStatus">CONNECTED: LOCALHOST</span>
+            </div>
+            <div style="font-size: 0.8rem; color: #555;">VER 2.0.4 // MECHA_EDITION</div>
+        </div>
+
+        <div class="reader-container">
+            <div class="text-panel">
+                <h2 class="chapter-title" id="chapterTitle">INITIALIZING...</h2>
+                <div class="chapter-text" id="chapterContent">
+                    <p>系统正在加载数据模块...</p>
+                    <p>请从左侧选择初始同步章节。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-controls">
+            <button class="control-btn" onclick="prevChapter()">
+                << 上一张</button>
+                    <button class="control-btn" onclick="toggleTheme()">切换视觉效果</button>
+                    <button class="control-btn" onclick="nextChapter()">下一章 >></button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
