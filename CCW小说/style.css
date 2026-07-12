@@ -1,0 +1,395 @@
+:root {
+    --bg-dark: #050505;
+    --panel-bg: #111111;
+    --border-color: #333333;
+    --accent-primary: #ff6600;
+    /* 工业橙 */
+    --accent-secondary: #00ffcc;
+    /* 赛博青 */
+    --text-main: #a0a0a0;
+    --text-highlight: #ffffff;
+    --scan-line: rgba(0, 255, 204, 0.03);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-primary) var(--bg-dark);
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    font-family: 'Courier New', Courier, monospace;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    background-image:
+        linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, .3) 25%, rgba(0, 0, 0, .3) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .3) 75%, rgba(0, 0, 0, .3) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, .3) 25%, rgba(0, 0, 0, .3) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, .3) 75%, rgba(0, 0, 0, .3) 76%, transparent 77%, transparent);
+    background-size: 50px 50px;
+}
+
+/* 扫描线效果 */
+body::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+/* ---------------- 新增：启动首页样式 ---------------- */
+#landing-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-dark);
+    transition: opacity 0.8s ease-out;
+}
+
+#landing-page.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.landing-logo {
+    font-size: 3.5rem;
+    color: var(--accent-primary);
+    text-shadow: 0 0 30px rgba(255, 102, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+    animation: logoGlow 2s infinite alternate;
+}
+
+.landing-desc {
+    color: var(--accent-secondary);
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    animation: blink 1.2s infinite;
+}
+
+.start-btn {
+    background: transparent;
+    border: 2px solid var(--accent-primary);
+    color: var(--accent-primary);
+    padding: 18px 45px;
+    font-family: inherit;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+    clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+}
+
+.start-btn:hover {
+    background: var(--accent-primary);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255, 102, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.landing-tips {
+    position: absolute;
+    bottom: 40px;
+    font-size: 0.85rem;
+    color: #555;
+}
+
+@keyframes logoGlow {
+    from {
+        text-shadow: 0 0 20px rgba(255, 102, 0, 0.3);
+    }
+
+    to {
+        text-shadow: 0 0 40px rgba(255, 102, 0, 0.8);
+    }
+}
+
+
+/* 左侧导航栏 */
+.sidebar {
+    width: 280px;
+    background: var(--panel-bg);
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    position: relative;
+}
+
+.brand {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.brand h1 {
+    color: var(--accent-primary);
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+    text-transform: uppercase;
+}
+
+.brand span {
+    font-size: 0.8rem;
+    color: var(--accent-secondary);
+    display: block;
+    margin-top: 5px;
+}
+
+.chapter-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.chapter-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 15px;
+    margin-bottom: 10px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.chapter-btn:hover {
+    border-color: var(--accent-secondary);
+    color: var(--accent-secondary);
+    background: rgba(0, 255, 204, 0.05);
+    padding-left: 20px;
+}
+
+.chapter-btn.active {
+    background: var(--accent-primary);
+    color: #000;
+    border-color: var(--accent-primary);
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(255, 102, 0, 0.3);
+}
+
+.chapter-btn.active::before {
+    content: '>';
+    position: absolute;
+    left: 5px;
+    animation: blink 1s infinite;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 5;
+}
+
+.header-bar {
+    height: 60px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    background: rgba(17, 17, 17, 0.9);
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--accent-secondary);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-secondary);
+    border-radius: 50%;
+    box-shadow: 0 0 5px var(--accent-secondary);
+    animation: pulse 2s infinite;
+}
+
+.reader-container {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+.text-panel {
+    height: fit-content;
+    max-width: 800px;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--border-color);
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 装饰性铆钉 */
+.text-panel::before,
+.text-panel::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #222;
+    border-radius: 50%;
+    box-shadow: inset 1px 1px 2px #000;
+    border: 1px solid #444;
+}
+
+.text-panel::before {
+    top: 10px;
+    left: 10px;
+}
+
+.text-panel::after {
+    bottom: 10px;
+    right: 10px;
+}
+
+.chapter-title {
+    color: var(--accent-primary);
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 15px;
+    text-transform: uppercase;
+}
+
+.chapter-text {
+    line-height: 1.8;
+    font-size: 1.1rem;
+    text-align: justify;
+    color: #ccc;
+}
+
+.chapter-text p {
+    margin-bottom: 20px;
+}
+
+/* 底部控制栏 */
+.footer-controls {
+    height: 50px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: var(--panel-bg);
+}
+
+.control-btn {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: inherit;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.control-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    box-shadow: 0 0 8px rgba(255, 102, 0, 0.2);
+}
+
+/* 动画 */
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+        box-shadow: 0 0 0px var(--accent-secondary);
+    }
+
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 10px var(--accent-secondary);
+    }
+
+    100% {
+        opacity: 0.5;
+        box-shadow: 0 0 0px var(--accent-secondary);
+    }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border: 1px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+}
+
+.content p {
+    line-height: 1.8;
+    font-size: 17px;
+    margin: 12px 0;
+}
+
+.deduction-block {
+    margin: 20px 0;
+    padding: 18px 22px;
+    background-color: #f5f0ff;
+    border-left: 4px solid #7b61ff;
+    border-radius: 6px;
+    color: #4a3b78;
+    font-family: "楷体", serif;
+    font-size: 16px;
+    line-height: 1.7;
+}
