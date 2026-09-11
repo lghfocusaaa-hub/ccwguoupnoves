@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人物档案Character</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="static/sic/logo.png" type="image/png">
+</head>
+
+<body>
+    <div id="landing-page">
+        <div class="landing-logo">人物档案·Character</div>
+        <div class="landing-desc">:: CHARACTER FILE ::</div>
+        <button class="start-btn" onclick="enterReader()">开始阅读</button>
+        <div class="landing-tips">Vessel Yamiaoω制作</div>
+    </div>
+
+    <div class="sidebar">
+        <div class="brand">
+            <h1>人物档案</h1>
+            <span>CHARACTER FILE</span>
+        </div>
+        <div class="chapter-list" id="chapterList">
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header-bar">
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span id="connectionStatus">CONNECTED: LOCALHOST</span>
+            </div>
+            <button onclick="window.location.href='index.html'" class="cyber-btn mr-8">
+                <div style="font-size: 0.8rem; color: inherit;">&lt; 返回主页</div>
+            </button>
+        </div>
+
+        <div class="reader-container">
+            <div class="text-panel">
+                <h2 class="chapter-title" id="chapterTitle">INITIALIZING...</h2>
+                <div class="chapter-text" id="chapterContent">
+                    <p>系统正在加载数据模块...</p>
+                    <p>请从左侧选择初始同步章节。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-controls">
+            <button class="control-btn" onclick="prevChapter()">
+                << 上一章</button>
+                    <button class="control-btn" onclick="toggleTheme()">切换视觉效果</button>
+                    <button class="control-btn" onclick="nextChapter()">下一章 >></button>
+        </div>
+    </div>
+
+    <script>
+        const novelData = [
+            {
+                title: "安静",
+                filePath: 'Character file/anjin.txt'
+            },
+
+            {
+                title: "W",
+                filePath: 'Character file/w.txt'
+            }
+        ];
+
+        let currentChapterIndex = 0;
+        const chapterListEl = document.getElementById('chapterList');
+        const titleEl = document.getElementById('chapterTitle');
+        const contentEl = document.getElementById('chapterContent');
+        const statusEl = document.getElementById('connectionStatus');
+        const landingPage = document.getElementById('landing-page');
+        const readerMain = document.querySelector('.main-content');
+
+        function enterReader() {
+            landingPage.classList.add('hide');
+            setTimeout(() => {
+                init();
+            }, 300);
+        }
+
+        document.addEventListener('keydown', () => {
+            if (!landingPage.classList.contains('hide')) {
+                enterReader();
+            }
+        });
+
+        document.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (!landingPage.classList.contains('hide')) {
+                enterReader();
+            }
+        }, { passive: false });
+
+        function init() {
+            renderChapterList();
+            loadChapter(0);
+        }
+
+        function renderChapterList() {
+            chapterListEl.innerHTML = '';
+            novelData.forEach((chapter, index) => {
+                const btn = document.createElement('button');
+                btn.className = `chapter-btn ${index === currentChapterIndex ? 'active' : ''}`;
+                btn.innerText = `SEC_0${index + 1} // ${chapter.title}`;
+                btn.onclick = () => loadChapter(index);
+                chapterListEl.appendChild(btn);
+            });
+        }
+
+        function loadChapter(index) {
+            if (index < 0 || index >= novelData.length) return;
+
+            currentChapterIndex = index;
+            renderChapterList();
+
+            titleEl.style.opacity = 0;
+            contentEl.style.opacity = 0;
+            statusEl.innerText = "DOWNLOADING DATA...";
+            statusEl.style.color = "#ff6600";
+
+            setTimeout(async () => {
+                const currentChapter = novelData[index];
+                titleEl.innerText = currentChapter.title;
+
+                if (currentChapter.filePath) {
+                    try {
+                        const res = await fetch(currentChapter.filePath);
+                        if (!res.ok) throw new Error("文件读取失败");
+                        const txtContent = await res.text();
+                        contentEl.innerHTML = txtContent.split('\n').filter(line => line.trim()).map(p => `<p>${p}</p>`).join('');
+                    } catch (err) {
+                        contentEl.innerHTML = `<p style="color: #ff4444;">错误：无法加载章节文件 ${currentChapter.filePath}</p>`;
+                    }
+                } else {
+                    contentEl.innerHTML = currentChapter.content;
+                }
+
+                titleEl.style.opacity = 1;
+                contentEl.style.opacity = 1;
+                statusEl.innerText = "SYNC COMPLETE: SEC_0" + (index + 1);
+                statusEl.style.color = "#00ffcc";
+                document.querySelector('.reader-container').scrollTop = 0;
+                if (window.innerWidth <= 768) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 300);
+        }
+
+        function nextChapter() {
+            if (currentChapterIndex < novelData.length - 1) {
+                loadChapter(currentChapterIndex + 1);
+            }
+        }
+
+        function prevChapter() {
+            if (currentChapterIndex > 0) {
+                loadChapter(currentChapterIndex - 1);
+            }
+        }
+
+        function toggleTheme() {
+            const root = document.documentElement;
+            const currentBg = getComputedStyle(root).getPropertyValue('--bg-dark').trim();
+            if (currentBg === '#050505') {
+                root.style.setProperty('--bg-dark', '#1a1a1a');
+                root.style.setProperty('--panel-bg', '#252525');
+            } else {
+                root.style.setProperty('--bg-dark', '#050505');
+                root.style.setProperty('--panel-bg', '#111111');
+            }
+        }
+
+        init();
+
+    </script>
+</body>
+
+</html>

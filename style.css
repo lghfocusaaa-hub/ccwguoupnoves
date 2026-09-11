@@ -393,3 +393,141 @@ body::after {
     font-size: 16px;
     line-height: 1.7;
 }
+
+.cyber-btn {
+    position: relative;
+    padding: 8px 24px;
+    background: transparent;
+    border: 1px solid #00ffcc;
+    color: #00ffcc;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 255, 204, 0.2);
+}
+
+.cyber-btn:hover {
+    background: rgba(0, 255, 204, 0.1);
+    box-shadow: 0 0 15px rgba(0, 255, 204, 0.6), inset 0 0 10px rgba(0, 255, 204, 0.2);
+    text-shadow: 0 0 5px #00ffcc;
+    transform: translateY(-2px);
+}
+
+.cyber-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 0 5px rgba(0, 255, 204, 0.4);
+}
+
+.cyber-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #00ffcc;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.cyber-btn:hover::before {
+    transform: scaleY(1);
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        overflow: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        border-right: none;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .brand h1 {
+        font-size: 1.2rem;
+    }
+
+    .chapter-list {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 8px;
+        padding: 8px 12px;
+    }
+
+    .chapter-btn {
+        min-width: 160px;
+        margin-bottom: 0;
+        font-size: 0.9rem;
+        padding: 12px 10px;
+        white-space: nowrap;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .header-bar {
+        padding: 0 15px;
+        height: auto;
+        min-height: 50px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .status-indicator {
+        font-size: 0.8rem;
+    }
+
+    .reader-container {
+        padding: 20px 15px;
+    }
+
+    .text-panel {
+        padding: 20px 15px;
+    }
+
+    .chapter-title {
+        font-size: 1.4rem;
+    }
+
+    .chapter-text {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .footer-controls {
+        padding: 10px;
+        flex-wrap: wrap;
+        height: auto;
+    }
+
+    .control-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+
+    .landing-logo {
+        font-size: 2rem;
+        letter-spacing: 4px;
+    }
+
+    .landing-desc {
+        font-size: 0.9rem;
+    }
+
+    .start-btn {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+}

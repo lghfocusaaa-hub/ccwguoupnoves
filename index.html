@@ -1,60 +1,1167 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCW大群小说</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NO.0 AUTHORITY | 零号权限</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="static/sic/logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            dark: '#050505',
+                            panel: '#0a0a0a',
+                            orange: '#ff6600',
+                            cyan: '#00ffcc',
+                            gray: '#1a1a1a',
+                            blue: '#05B9F5',
+                            purple: '#C084FC'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Courier New"', 'Courier', 'monospace'],
+                    },
+                    boxShadow: {
+                        'neon-orange': '0 0 10px #ff6600, 0 0 20px #ff6600',
+                        'neon-cyan': '0 0 10px #00ffcc, 0 0 20px #00ffcc',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glitch': 'glitch 1s linear infinite',
+                    },
+                    keyframes: {
+                        glitch: {
+                            '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
+                            '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
+                            '62%': { transform: 'translate(0,0) skew(5deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        /* 网格背景 */
+        .cyber-grid {
+            background-image:
+                linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* 扫描线效果 */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 255, 204, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% {
+                bottom: 100%;
+            }
+
+            100% {
+                bottom: -100px;
+            }
+        }
+
+        /* 故障文字效果 */
+        .glitch-text {
+            position: relative;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #050505;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -1px 0 #ff6600;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -1px 0 #00ffcc;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(14px, 9999px, 127px, 0);
+            }
+
+            20% {
+                clip: rect(80px, 9999px, 10px, 0);
+            }
+
+            40% {
+                clip: rect(30px, 9999px, 80px, 0);
+            }
+
+            60% {
+                clip: rect(90px, 9999px, 10px, 0);
+            }
+
+            80% {
+                clip: rect(10px, 9999px, 140px, 0);
+            }
+
+            100% {
+                clip: rect(50px, 9999px, 60px, 0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip: rect(65px, 9999px, 100px, 0);
+            }
+
+            20% {
+                clip: rect(10px, 9999px, 15px, 0);
+            }
+
+            40% {
+                clip: rect(90px, 9999px, 10px, 0);
+            }
+
+            60% {
+                clip: rect(15px, 9999px, 80px, 0);
+            }
+
+            80% {
+                clip: rect(120px, 9999px, 5px, 0);
+            }
+
+            100% {
+                clip: rect(40px, 9999px, 110px, 0);
+            }
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ffcc;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff6600;
+        }
+
+        .cyber-card {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(5px);
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 240px;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .cyber-card.season-0::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #FFFFFF;
+            filter: drop-shadow(0 0 5px #FFFFFf);
+            transform: unset;
+        }
+
+        /* 第一季卡片专属基础高亮条 */
+        .cyber-card.season-1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #00ffcc;
+            filter: drop-shadow(0 0 5px #00ffcc);
+            transform: unset;
+        }
+
+        /* 第二季卡片专属基础高亮条 */
+        .cyber-card.season-2::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ff6600;
+            filter: drop-shadow(0 0 5px #ff6600);
+            transform: unset;
+        }
+
+        .cyber-card.season-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #05B9F5;
+            filter: drop-shadow(0 0 5px #05B9F5);
+            transform: unset;
+        }
+
+        .cyber-card.season-4::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #C084FC;
+            filter: drop-shadow(0 0 5px #C084FC);
+            transform: unset;
+        }
+
+        .cyber-card:hover {
+            border-color: unset;
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .cyber-card.season-0:hover {
+            border-color: #ffffff;
+            box-shadow: 0 0 40px rgba(97, 97, 97, 0.4);
+        }
+
+        .cyber-card.season-1:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.4);
+        }
+
+        .cyber-card.season-2:hover {
+            border-color: #ff6600;
+            box-shadow: 0 0 40px rgba(255, 102, 0, 0.4);
+        }
+
+        .cyber-card.season-3:hover {
+            border-color: #05B9F5;
+            box-shadow: 0 0 40px rgba(38, 0, 255, 0.4);
+        }
+
+        .cyber-card.season-4:hover {
+            border-color: #C084FC;
+            box-shadow: 0 0 40px rgba(204, 0, 255, 0.4);
+        }
+
+        .card-enter-tag {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: inherit;
+            animation: enter-pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .cyber-card:hover .card-enter-tag {
+            transform: translateX(10px);
+        }
+
+        @keyframes enter-pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .char-card {
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(26, 26, 26, 0.8));
+            backdrop-filter: blur(8px);
+            border: 1px solid #2a2a2a;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            transform: perspective(1000px) rotateX(0deg);
+            min-width: 280px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .char-card::before,
+        .char-card::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            opacity: 0.2;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+        }
+
+        .char-card::before {
+            top: 12px;
+            right: 12px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+        }
+
+        .char-card::after {
+            bottom: 12px;
+            left: 12px;
+            border-bottom: 2px solid currentColor;
+            border-left: 2px solid currentColor;
+        }
+
+        .char-card .char-bg-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(currentColor 1px, transparent 1px),
+                linear-gradient(90deg, currentColor 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .char-card .top-scan {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            filter: blur(1px);
+            z-index: 4;
+        }
+
+        .char-card .char-tag-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            padding: 4px 16px;
+            font-size: 12px;
+            color: inherit;
+            font-family: monospace;
+        }
+
+        .char-card:hover {
+            transform: perspective(1000px) rotateX(5deg) translateY(-10px) scale(1.02);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+            border-color: currentColor;
+        }
+
+        .char-card:hover::before,
+        .char-card:hover::after {
+            opacity: 1;
+        }
+
+        .char-card:hover .top-scan {
+            transform: translateX(100%);
+        }
+
+        .char-card:hover .char-tag-bar {
+            transform: translateY(0);
+        }
+
+        .main-char-tag {
+            animation: pulse-slow 2s infinite;
+            color: #00ffcc;
+            border-color: #00ffcc;
+        }
+
+        .anti-char-tag {
+            animation: pulse-slow 1.5s infinite;
+            color: #ff2222;
+            border-color: #ff2222;
+        }
+
+        .char-card .char-img-wrap {
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .char-card .char-img-wrap::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: currentColor;
+            opacity: 0.1;
+            mix-blend-mode: overlay;
+            transition: opacity 0.3s ease;
+        }
+
+        .char-card:hover .char-img-wrap::after {
+            opacity: 0.25;
+        }
+    </style>
 </head>
 
-<body>
+<body class="antialiased selection:bg-cyber-orange selection:text-white">
 
-    <!-- 启动首页 -->
-    <div id="landing-page">
-        <div class="landing-logo">CCW novels</div>
-        <div class="landing-desc">:: CCW大群小说 ::</div>
-        <button class="start-btn" onclick="enterReader()">开始阅读</button>
-        <div class="landing-tips">Vessel Yamiaoω制作</div>
+    <div class="cyber-grid"></div>
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="scanline"></div>
     </div>
 
-    <div class="sidebar">
-        <div class="brand">
-            <h1>CCW novels</h1>
-            <span>SNOVELS FROM CCW</span>
-        </div>
-        <div class="chapter-list" id="chapterList">
-        </div>
-    </div>
+    <nav class="fixed w-full z-50 bg-cyber-dark/90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="static/sic/logo.png" alt="Logo"
+                        class="w-8 h-8 text-cyber-cyan animate-pulse filter drop-shadow-[0_0_5px_rgba(0,255,204,0.8)]">
+                    <span class="text-xl font-bold tracking-widest text-white font-mono">NO.0<span
+                            class="text-cyber-orange">AUTHORITY</span></span>
+                </div>
 
-    <div class="main-content">
-        <div class="header-bar">
-            <div class="status-indicator">
-                <div class="status-dot"></div>
-                <span id="connectionStatus">CONNECTED: LOCALHOST</span>
-            </div>
-            <div style="font-size: 0.8rem; color: #555;">VER 2.0.4 // MECHA_EDITION</div>
-        </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home"
+                        class="text-gray-400 hover:text-cyber-cyan transition-colors font-mono text-sm tracking-wider">[首页]</a>
+                    <a href="#read"
+                        class="px-4 py-1 border border-cyber-orange text-cyber-orange font-mono text-sm hover:bg-cyber-orange hover:text-black transition-all shadow-[0_0_10px_rgba(255,102,0,0.3)]">
+                        阅读
+                        <a href="#projects"
+                            class="text-gray-400 hover:text-cyber-cyan transition-colors font-mono text-sm tracking-wider">[人物档案]</a>
+                    </a>
+                </div>
 
-        <div class="reader-container">
-            <div class="text-panel">
-                <h2 class="chapter-title" id="chapterTitle">INITIALIZING...</h2>
-                <div class="chapter-text" id="chapterContent">
-                    <p>系统正在加载数据模块...</p>
-                    <p>请从左侧选择初始同步章节。</p>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-cyber-cyan focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
                 </div>
             </div>
         </div>
-
-        <div class="footer-controls">
-            <button class="control-btn" onclick="prevChapter()">
-                << 上一张</button>
-                    <button class="control-btn" onclick="toggleTheme()">切换视觉效果</button>
-                    <button class="control-btn" onclick="nextChapter()">下一章 >></button>
+        <div id="mobile-menu" class="hidden md:hidden bg-cyber-panel border-b border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 font-mono">
+                <a href="#home" class="block px-3 py-2 text-gray-300 hover:text-cyber-cyan hover:bg-gray-900">[首页]</a>
+                <a href="#read" class="block px-3 py-2 text-gray-300 hover:text-cyber-cyan hover:bg-gray-900">[阅读]</a>
+                <a href="#projects" class="block px-3 py-2 text-cyber-orange font-bold">[人物档案]</a>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <script src="app.js"></script>
+    <!-- Hero 区域 -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center z-10">
+            <div
+                class="mb-6 inline-block px-3 py-1 border border-cyber-cyan/30 rounded bg-cyber-cyan/5 text-cyber-cyan text-xs font-mono tracking-widest">
+                WEICOME TO VISIT // V.2.0.0
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter text-white glitch-text" data-text="零号权限">
+                零号权限
+            </h1>
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter text-white glitch-text"
+                data-text="NO.0_AUTHORITY">
+                NO.0_AUTHORITY
+            </h1>
+
+            <div class="mt-10 flex flex-col sm:flex-row gap-6 justify-center">
+                <a href="#read"
+                    class="group relative px-8 py-3 bg-transparent border border-cyber-cyan text-cyber-cyan font-mono font-bold overflow-hidden transition-all hover:shadow-[0_0_20px_rgba(0,255,204,0.4)]">
+                    <span
+                        class="absolute w-0 h-0 transition-all duration-500 ease-out bg-cyber-cyan rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                    <span class="relative flex items-center gap-2">
+                        开始阅读 <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </a>
+                <a href="#projects"
+                    class="px-8 py-3 bg-cyber-orange text-black font-mono font-bold hover:bg-orange-500 transition-colors shadow-[0_0_15px_rgba(255,102,0,0.4)] clip-path-slant">
+                    人物档案
+                </a>
+            </div>
+
+            <div
+                class="absolute bottom-10 left-0 w-full flex justify-between px-10 text-xs text-gray-600 font-mono opacity-50 pointer-events-none">
+                <span>X: 45.201 // Y: 12.993</span>
+                <span>STATUS: STABLE</span>
+                <span>LOC: CHENGDU_CN</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-cyber-panel/50 border-y border-gray-900" id="read">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex items-center gap-4 mb-12">
+
+                <span class="text-cyber-orange text-2xl font-mono">简介.</span>
+
+                <h2 class="text-3xl font-bold text-white font-mono tracking-wider">
+                    BRIEF_INTRODUCTION
+                </h2>
+
+                <div class="h-px bg-gray-800 flex-1"></div>
+            </div>
+
+            <div class="text-gray-400 font-mono leading-relaxed max-w-3xl">
+                <p>
+                    因为一个怪物的出现，随着是超能力的出现，高层反应是不清楚此是好是坏，毕竟引出了另一个种族，高层称这个怪物为怪异，逐渐的，怪异群越来越多，而人类阵营的超能力者也越来越多，人类拼死守护着自己的家园
+                    “能守住吗？”<br>“能”
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="py-20 bg-cyber-panel/50 border-y border-gray-900" id="read">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-12">
+                <span class="text-cyber-orange text-2xl font-mono">阅读.</span>
+                <h2 class="text-3xl font-bold text-white font-mono">READ_A_NOVEL</h2>
+                <div class="h-px bg-gray-800 flex-1"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <a class="cyber-card season-1" href="Novel_1.html">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fas fa-server text-cyber-cyan text-3xl"></i>
+                        <h3 class="text-2xl font-bold text-white font-mono tracking-wider">第一季·校园异能录</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-cyan/30 text-cyber-cyan text-sm font-mono rounded">测验能力</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-cyan/30 text-cyber-cyan text-sm font-mono rounded">凡人的愤怒</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-cyan/30 text-cyber-cyan text-sm font-mono rounded">危险！</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-cyan/30 text-cyber-cyan text-sm font-mono rounded">安静？</span>
+                    </div>
+                    <div class="card-enter-tag text-cyber-cyan">
+                        进入阅读 <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a class="cyber-card season-2" href="Novel_2.html">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fas fa-server text-cyber-orange text-3xl"></i>
+                        <h3 class="text-2xl font-bold text-white font-mono tracking-wider">第二季·正义使者</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-orange/30 text-cyber-orange text-sm font-mono rounded">完了</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-orange/30 text-cyber-orange text-sm font-mono rounded">print("安静……");</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-orange/30 text-cyber-orange text-sm font-mono rounded">被折叠的第六章</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-orange/30 text-cyber-orange text-sm font-mono rounded">asdfghjkl</span>
+                    </div>
+                    <div class="card-enter-tag text-cyber-orange">
+                        进入阅读 <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a class="cyber-card season-3" href="Novel_3.html">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fas fa-server text-cyber-blue text-3xl"></i>
+                        <h3 class="text-2xl font-bold text-white font-mono tracking-wider">第三季·纯现实校园</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-blue/30 text-cyber-blue text-sm font-mono rounded">开学摸底，顶尖学霸团</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-blue/30 text-cyber-blue text-sm font-mono rounded">盛夏奔赴，未完的序章</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-blue/30 text-cyber-blue text-sm font-mono rounded">校园小事，无声的羁绊</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-blue/30 text-cyber-blue text-sm font-mono rounded">年级榜单，固定的前五</span>
+                    </div>
+                    <div class="card-enter-tag text-cyber-blue">
+                        进入阅读 <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a class="cyber-card season-4" href="Novel_4.html">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fas fa-server text-cyber-purple text-3xl"></i>
+                        <h3 class="text-2xl font-bold text-white font-mono tracking-wider">第四季·平凡英雄</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-purple/30 text-cyber-purple text-sm font-mono rounded">睡觉吧</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-purple/30 text-cyber-purple text-sm font-mono rounded">无底深渊</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-purple/30 text-cyber-purple text-sm font-mono rounded">绝望</span>
+                    </div>
+                    <div class="card-enter-tag text-cyber-purple">
+                        进入阅读 <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+                <a class="cyber-card season-0" href="Character.html">
+                    <div class="flex items-center gap-4 mb-6">
+                        <i class="fas fa-server text-cyber-0 text-3xl"></i>
+                        <h3 class="text-2xl font-bold text-white font-mono tracking-wider">人物简介</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-3">
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-0/30 text-cyber-0 text-sm font-mono rounded">安静</span>
+                        <span
+                            class="px-3 py-2 bg-gray-900 border border-cyber-0/30 text-cyber-0 text-sm font-mono rounded">W</span>
+                    </div>
+                    <div class="card-enter-tag text-cyber-0">
+                        进入阅读 <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-12">
+                <span class="text-cyber-orange text-2xl font-mono">人物档案.</span>
+                <h2 class="text-3xl font-bold text-white font-mono">CHARACTER​</h2>
+                <div class="h-px bg-gray-800 flex-1"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Project 1 -->
+                <div class="char-card group text-cyber-cyan">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/user_projects_assets/255021733/10d23155aca0c75af79a244d3ab24db0.png?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="安静"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-3 left-3 px-2 py-1 border main-char-tag text-xs font-mono">MAIN_CHAR
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-cyber-cyan transition-colors">
+                                安静</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/6575ba741ddb475eb2207ea7"
+                                    class="text-gray-400 hover:text-cyber-cyan transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            人生如梦，快速坠过
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-cyber-cyan/30 text-cyber-cyan">#小说项目发起人</span>
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-cyber-cyan/30 text-cyber-cyan">#作者</span>
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-cyber-cyan/30 text-cyber-cyan">#撰写者</span>
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-cyber-cyan/30 text-cyber-cyan">#主角</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar">CHAR_ID: NO.001 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="char-card group text-blue-400">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/avatar/67c1d7083778fc282d62dfcf/269023916/b72d28454a6757b104a5ef6f8bcbd3f2.jpg?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="W"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-blue-400 transition-colors">
+                                W</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/67c1d7083778fc282d62dfcf"
+                                    class="text-gray-400 hover:text-blue-400 transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            那只是昨夜的一场梦而已，那只是昨夜的一场游戏，那只是一场游戏一场梦
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-blue-400/30 text-blue-400">#小说项目发起人</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-blue-400/30 text-blue-400">#作者</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-blue-400/30 text-blue-400">#撰写者</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-blue-400/30 text-blue-400">#主角</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar">CHAR_ID: NO.002 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="char-card group text-purple-400">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/avatar/648fd9aee9dfc856e83f145c/9f0b4beb-5c22-4c81-919c-34b200c58e59.jpg?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="小金"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-purple-400 transition-colors">
+                                小金</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/648fd9aee9dfc856e83f145c"
+                                    class="text-gray-400 hover:text-purple-400 transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            「ich☆liebe☆dich」
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-purple-400/30 text-purple-400">#撰写者</span>
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-purple-400/30 text-purple-400">#角色</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar">CHAR_ID: NO.003 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="char-card group text-yellow-400">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/avatar/688ff9a9fc898317568d06de/a07668fe-de64-42ad-a713-8c4e902d9d5d.jpg?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="原始入"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-yellow-400 transition-colors">
+                                原始入</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/688ff9a9fc898317568d06de"
+                                    class="text-gray-400 hover:text-yellow-400 transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            tf 联盟 原始入，会一些编程，美术为零，只有周末能上线，另外校园战斗0.04无限延期
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-yellow-400/30 text-yellow-400">#撰写者</span>
+                            <span
+                                class="px-2 py-1 bg-gray-900/80 border border-yellow-400/30 text-yellow-400">#主角</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar">CHAR_ID: NO.004 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="char-card group text-white">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/user_projects_assets/d7159ca1-70e8-4876-aa7b-768d9172380a.png?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="Vessel夜喵"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-3 left-3 px-2 py-1 border main-char-tag text-xs font-mono">WEB_PRODUCER
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold text-white font-mono group-hover:text-white transition-colors">
+                                Vessel夜喵</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/69704d3886bbc77f84e44e23"
+                                    class="text-gray-400 hover:text-white transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            如果今天我还活着，那么只能说你很幸运
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-gray-900/80 border border-white/30 text-white">#网站制作人</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-white/30 text-white">#程序员</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-white/30 text-white">#技术员</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-white/30 text-white">#角色</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar text-white">CHAR_ID: NO.005 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="char-card group text-[#FF6600]">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/user_projects_assets/9b9a79cb-fbee-4edb-ad19-18423854a3f9.png?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="炽阳"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-[#FF6600] transition-colors">
+                                龙源</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/6947272a86bbc77f84e3fe2a"
+                                    class="text-gray-400 hover:text-[#FF6600] transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            互粉，tf盟主（与墨语联盟合作），串串集团技术部，闪电宗普通成员
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-gray-900/80 border border-[#FF6600]/30 text-[#FF6600]">#撰写者</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-[#FF6600]/30 text-[#FF6600]">#角色</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar text-[#FF6600]">CHAR_ID: NO.06 | PERMISSION_LEVEL: ADVANCED</div>
+                </div>
+
+
+                <!-- Project 7 -->
+                <div class="char-card group text-[#FF6600]">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/avatar/5fb3d50f49e1b44b87ebcf0b/bf72cfec-1805-45bd-8bb7-864e30ad6fda.jpg?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="黑龙"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-[#FF6600] transition-colors">
+                                黑龙</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/5fb3d50f49e1b44b87ebcf0b"
+                                    class="text-gray-400 hover:text-[#FF6600] transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            你上哪找十日+ben10+进巨+kards+ccw+究桃大帝啊。
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-gray-900/80 border border-[#FF6600]/30 text-[#FF6600]">#撰写者</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-[#FF6600]/30 text-[#FF6600]">#角色</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar text-[#FF6600]">CHAR_ID: NO.07 | PERMISSION_LEVEL: ADVANCED</div>
+                </div>
+
+                <!-- Project 8 -->
+                <div class="char-card group text-pink-400">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/avatar/68d8ee94fc898317568db3e4/276019914/aa15bee900eca86c10b2dfcc8a5a6c3b.png?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="cat"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                        <div class="absolute top-3 left-3 px-2 py-1 border anti-char-tag text-xs font-mono">ANTI_HERO
+                        </div>
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-pink-400 transition-colors">
+                                cat</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/68d8ee94fc898317568db3e4"
+                                    class="text-gray-400 hover:text-pink-400 transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            不要看我的自我介绍
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-gray-900/80 border border-pink-400/30 text-pink-400">#角色</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-pink-400/30 text-pink-400">#反派</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar">CHAR_ID: NO.008 | PERMISSION_LEVEL: ADMIN</div>
+                </div>
+
+                <!-- Project 9 -->
+                <div class="char-card group text-red-500">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                        <img src="https://m.ccw.site/user_projects_assets/269003376/ba4e532794d67adbdb9bf308af96d91e.png?x-oss-process=image%2Fresize%2Cs_150%2Fformat%2Cwebp"
+                            alt="梅OVO"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-white font-mono group-hover:text-red-500 transition-colors">
+                                梅OVO</h3>
+                            <div class="flex gap-3">
+                                <a href="https://www.ccw.site/student/67a49ac34b57da1266f859e0"
+                                    class="text-gray-400 hover:text-red-500 transition-colors"><i
+                                        class="fas fa-external-link-alt"></i></a>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            ?
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-gray-900/80 border border-red-500/30 text-red-500">#角色</span>
+                            <span class="px-2 py-1 bg-gray-900/80 border border-red-500/30 text-red-500">#突袭者</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar text-red-500">CHAR_ID: NO.09 | PERMISSION_LEVEL: DANGER</div>
+                </div>
+
+                <!-- Project 10 -->
+                <div class="char-card group text-gray-800 bg-gray-900">
+                    <div class="char-bg-pattern"></div>
+                    <div class="top-scan"></div>
+                    <div class="char-img-wrap h-48 overflow-hidden relative">
+                    </div>
+                    <div class="p-6 relative z-10 flex-1">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3
+                                class="text-xl font-bold text-gray-800 font-mono group-hover:text-gray-800 transition-colors">
+                                undifend</h3>
+                            <div class="flex gap-3">
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 font-mono h-12 overflow-hidden">
+                            undifend
+                        </p>
+                        <div class="flex gap-2 text-xs font-mono flex-wrap">
+                            <span class="px-2 py-1 bg-white/10 border border-gray-700 text-gray-800">#幕后</span>
+                        </div>
+                    </div>
+                    <div class="char-tag-bar text-gray-800 bg-white/10">undifend</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-cyber-panel/50 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4 mb-10"> <span class="text-cyber-cyan text-2xl font-mono">更新日志.</span>
+                <h2 class="text-3xl font-bold text-white font-mono">CHANGE_LOG</h2>
+                <div class="h-px bg-gray-800 flex-1"></div>
+            </div>
+            <div class="space-y-3 font-mono text-sm max-h-64 overflow-y-auto pr-2">
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.10</span> <span
+                        class="text-gray-300">ccw大群小说计划开始</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.10</span> <span
+                        class="text-gray-300">第一季第一章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.10</span> <span
+                        class="text-gray-300">第一季第二章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">第一季第三章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">CCW小说作品！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">小说群</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">第一季第四章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">第一季番外！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.11</span> <span
+                        class="text-gray-300">第一季第五章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.12</span> <span
+                        class="text-gray-300">第一季第六章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.12</span> <span
+                        class="text-gray-300">第一季第七章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.12</span> <span
+                        class="text-gray-300">第一季第八章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第一季第九章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第一季第十章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第一季完结！！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">网站主页！！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第二季开始！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第二季第一张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">第二季第二张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.13</span> <span
+                        class="text-gray-300">更新日志制作中。。。</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.14</span> <span
+                        class="text-gray-300">更新日志启动！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.14</span> <span
+                        class="text-gray-300">第二季第三章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.16</span> <span
+                        class="text-gray-300">第二季第四章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.17</span> <span
+                        class="text-gray-300">第二季第五章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.19</span> <span
+                        class="text-gray-300">第二季第零章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.21</span> <span
+                        class="text-gray-300">第二季第六章！！！</span></div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.23</span> <span
+                        class="text-gray-300">第二季第七章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.23</span> <span
+                        class="text-gray-300">第二季完结！！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.24</span> <span
+                        class="text-gray-300">增加人物档案</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.24</span> <span
+                        class="text-gray-300">完善阅读图标</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.24</span> <span
+                        class="text-gray-300">完善人物简介图标</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.24</span> <span
+                        class="text-gray-300">增加人物档案-安静</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.07.24</span> <span
+                        class="text-gray-300">增加人物档案-W</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.01</span> <span
+                        class="text-gray-300">第三季开始！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.07</span> <span
+                        class="text-gray-300">第三季第一张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.07</span> <span
+                        class="text-gray-300">第三季第二张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.07</span> <span
+                        class="text-gray-300">第三季第三章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.07</span> <span
+                        class="text-gray-300">第三季第四章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.07</span> <span
+                        class="text-gray-300">第三季第五章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.08</span> <span
+                        class="text-gray-300">第四季开始！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.08</span> <span
+                        class="text-gray-300">第四季第一张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.08</span> <span
+                        class="text-gray-300">第四季第二张！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.08</span> <span
+                        class="text-gray-300">第四季第三章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.11</span> <span
+                        class="text-gray-300">第四季第四章！！！</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.13</span> <span
+                        class="text-gray-300">网站域名跟新为：https://ccwguoupnoves.maozi.io/</span> </div>
+                <div class="flex gap-3 items-start"> <span
+                        class="text-cyber-orange font-bold min-w-[100px]">26.08.27</span> <span
+                        class="text-gray-300">第四季第无章！！！</span> </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-black py-8 border-t border-gray-900 text-center">
+        <p class="text-gray-600 text-xs font-mono">
+            DESIGNED & BUILT BY VESSEL_YEMIAO <br>
+            <span class="text-cyber-orange">&copy; 2026</span> ALL RIGHTS RESERVED
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+
 </body>
 
 </html>
